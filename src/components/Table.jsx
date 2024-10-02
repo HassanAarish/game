@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Table = () => {
   const [dataState, setDataState] = useState(
@@ -12,7 +12,16 @@ const Table = () => {
     }))
   );
   const [currentIndex, setCurrentIndex] = useState(0);
-  // const [admin, setAdmin] = useState("null");e
+  const [adminIndex, setAdminIndex] = useState("null");
+
+  const assignRandomAdmin = () => {
+    const randomIndex = Math.floor(Math.random() * dataState.length);
+    setAdminIndex(randomIndex);
+  };
+
+  useEffect(() => {
+    assignRandomAdmin();
+  }, []);
 
   const handleDescisionChange = (value, index) => {
     setCurrentIndex(index + 1);
@@ -26,7 +35,7 @@ const Table = () => {
         sameOpposite: "NP",
         plusMinus: "",
       };
-      return newArr;
+      return [...newArr];
     });
   };
 
@@ -39,6 +48,7 @@ const Table = () => {
         <th>Opposite</th>
         <th>Same Opposite</th>
         <th>+/-</th>
+        <th>Admin</th>
       </tr>
       {dataState.map((dt, i) => (
         <tr key={i}>
@@ -58,6 +68,7 @@ const Table = () => {
           <td>{dt.opposite}</td>
           <td>{dt.sameOpposite}</td>
           <td>{dt.plusMinus}</td>
+          <td>{adminIndex === i ? "Admin" : ""}</td>
         </tr>
       ))}
     </table>
