@@ -12,15 +12,11 @@ const Table = () => {
     }))
   );
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [adminIndex, setAdminIndex] = useState("null");
-
-  const assignRandomAdmin = () => {
-    const randomIndex = Math.floor(Math.random() * dataState.length);
-    setAdminIndex(randomIndex);
-  };
+  const [admin, setAdmin] = useState("");
 
   useEffect(() => {
-    assignRandomAdmin();
+    const randomAdmin = Math.random() > 0.5 ? "banker" : "player";
+    setAdmin(randomAdmin);
   }, []);
 
   const handleDescisionChange = (value, index) => {
@@ -48,27 +44,35 @@ const Table = () => {
         <th>Opposite</th>
         <th>Same Opposite</th>
         <th>+/-</th>
-        <th>Admin</th>
       </tr>
       {dataState.map((dt, i) => (
         <tr key={i}>
           <td>
-            <select
-              onChange={(e) => handleDescisionChange(e.target.value, i)}
-              value={dt.decisionValue}
-              disabled={currentIndex !== i}
-            >
-              <option value="">Select Value</option>
-              <option value="B">B</option>
-              <option value="P">P</option>
-            </select>
+            {admin === "banker" && (
+              <select
+                onChange={(e) => handleDescisionChange(e.target.value, i)}
+                value={dt?.decisionValue}
+                disabled={currentIndex !== i}
+              >
+                <option value="">Select Value</option>
+                <option value="B">B</option>
+                <option value="P">P</option>
+              </select>
+            )}
+            {admin === "player" && (
+              <text
+                type="text"
+                value={dt?.decisionValue}
+                readOnly
+                placeholder="Decision"
+              />
+            )}
           </td>
-          <td>{dt.banker}</td>
-          <td>{dt.player}</td>
-          <td>{dt.opposite}</td>
-          <td>{dt.sameOpposite}</td>
-          <td>{dt.plusMinus}</td>
-          <td>{adminIndex === i ? "Admin" : ""}</td>
+          <td>{dt?.banker}</td>
+          <td>{dt?.player}</td>
+          <td>{dt?.opposite}</td>
+          <td>{dt?.sameOpposite}</td>
+          <td>{dt?.plusMinus}</td>
         </tr>
       ))}
     </table>
